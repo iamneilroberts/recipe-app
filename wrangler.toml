@@ -1,0 +1,72 @@
+# Cloudflare Worker config for the recipe-capture MCP server.
+#
+# Worker/binding names are intentionally BRAND-NEUTRAL (the product name is
+# deferred — see docs/plans/2026-08-27-design-refinement-dual-target.md). Only
+# the public marketing name + hosted subdomain will carry the brand later; none
+# of the names here are wire contracts.
+#
+# ⚠️ Phase 0 provisioning (one-time, run by the operator, then paste IDs below):
+#   wrangler kv namespace create RECIPES
+#   wrangler d1 create recipe-app
+#   wrangler r2 bucket create recipe-media
+#   wrangler d1 migrations apply recipe-app --remote   # applies migrations/*.sql
+# The three "REPLACE_ME_*" ids below are the only thing standing between this
+# file and a real deploy. `wrangler dev` runs with local simulation regardless.
+
+name = "recipe-app"
+main = "src/worker.ts"
+compatibility_date = "2026-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+WORKER_ENV = "production"
+# Public base URL the Worker hands back in connector links / hosted pages.
+# Decoupled from the workers.dev host so a rename never touches code.
+WORKER_BASE_URL = "https://recipe-app.example.workers.dev"
+
+# Per-recipe JSON records + per-user index live here (see src/shared/kv-keys.ts).
+[[kv_namespaces]]
+binding = "RECIPES"
+id = "REPLACE_ME_KV_ID"
+
+# Auth: users table (per-user URL+token, HMAC-hashed). See migrations/0001_init.sql.
+[[d1_databases]]
+binding = "DB"
+database_name = "recipe-app"
+database_id = "REPLACE_ME_D1_ID"
+migrations_dir = "migrations"
+
+# Rendered recipe pages (HTML) + uploaded photos.
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "recipe-media"
+
+# Secrets (never committed — set via `wrangler secret put`, or .dev.vars locally):
+#   TOKEN_HASH_KEY   HMAC key for hashing per-user connector tokens (required)
+#   AUTH_KEYS        transitional comma-list of dev bearer tokens (optional)
+
+# ── Staging env ──────────────────────────────────────────────────────────────
+# Isolated KV/D1, own secrets. Deploy with `npm run deploy:dev`.
+[env.staging]
+name = "recipe-app-staging"
+main = "src/worker.ts"
+compatibility_date = "2026-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.staging.vars]
+WORKER_ENV = "staging"
+WORKER_BASE_URL = "https://recipe-app-staging.example.workers.dev"
+
+[[env.staging.kv_namespaces]]
+binding = "RECIPES"
+id = "REPLACE_ME_STAGING_KV_ID"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "recipe-app-staging"
+database_id = "REPLACE_ME_STAGING_D1_ID"
+migrations_dir = "migrations"
+
+[[env.staging.r2_buckets]]
+binding = "MEDIA"
+bucket_name = "recipe-media"
