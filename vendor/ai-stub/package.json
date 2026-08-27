@@ -1,0 +1,12 @@
+{
+  "name": "ai",
+  "version": "0.0.0-stub",
+  "private": true,
+  "description": "Local build stub for the Vercel AI SDK. The `agents` MCP CLIENT does a dynamic import(\"ai\") we never reach (we use only the MCP server). This keeps the full SDK out of the Worker bundle. If we ever use the MCP client, replace this file dependency with the real `ai` package.",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": "./index.js"
+  }
+}

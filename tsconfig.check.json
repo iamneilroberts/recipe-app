@@ -1,0 +1,11 @@
+{
+  // Whole-repo typecheck: src + tests + scripts. `npm run typecheck` uses THIS
+  // config, never a bare `tsc --noEmit` (which reads tsconfig.json and checks
+  // only src/). The voygent-lite lesson (#774): the build config is blind to
+  // tests, so a bare typecheck reads as full coverage while missing them.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types", "node", "vitest/globals"]
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts"]
+}

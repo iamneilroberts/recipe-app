@@ -1,0 +1,29 @@
+{
+  "name": "recipe-app",
+  "version": "0.0.1",
+  "private": true,
+  "description": "MCP-based recipe-capture app (Cloudflare Worker, StreamableHTTP /mcp). The user's own Claude/GPT subscription does the AI work; the server pays zero inference.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8787",
+    "typecheck": "tsc --noEmit -p tsconfig.check.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "deploy:dev": "wrangler deploy --env staging",
+    "deploy:prod": "wrangler deploy",
+    "smoke:local": "bash scripts/smoke.sh local"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.26.0",
+    "agents": "^0.5.0",
+    "ai": "file:vendor/ai-stub",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240923.0",
+    "@types/node": "^22.19.19",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0",
+    "wrangler": "^4.60.0"
+  }
+}

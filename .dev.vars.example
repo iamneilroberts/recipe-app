@@ -1,0 +1,11 @@
+# Local dev secrets for `wrangler dev`. Copy to `.dev.vars` (gitignored) and fill in.
+#
+# HMAC key used to hash per-user connector tokens before storing them in D1.
+# Any long random string works locally; generate one with:
+#   openssl rand -hex 32
+TOKEN_HASH_KEY="dev-only-change-me-openssl-rand-hex-32"
+
+# Optional transitional bearer allowlist for the legacy /mcp?key= path
+# (comma-separated). Handy for quick local smoke tests before you mint a
+# per-user token. Leave empty to require the per-user /mcp/u/{id}?token= path.
+AUTH_KEYS=""
