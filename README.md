@@ -51,6 +51,9 @@ scripts/smoke.sh local        # /health + tools/list + call ping, using the dev 
 
 ## Deploy (one-time provisioning first)
 
+Full step-by-step (run from your own machine — this needs Cloudflare credentials):
+**[`docs/runbooks/deploy.md`](docs/runbooks/deploy.md)**.
+
 The three `REPLACE_ME_*` ids in `wrangler.toml` are the only thing between this repo and a real
 deploy. Provision the stores, paste the ids, then deploy:
 
